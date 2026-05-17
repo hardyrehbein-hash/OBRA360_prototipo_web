@@ -18,6 +18,7 @@ const loginTitle = document.getElementById("loginTitle");
 
 function abrirDashboard() {
   loginScreen.style.display = "none";
+  loginBox.classList.remove("active");
   app.style.display = "flex";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
