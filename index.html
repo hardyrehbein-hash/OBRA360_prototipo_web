@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OBRA360 | Prototipo</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">OBRA<span>360</span></div>
+        <p>Sistema operativo de la construcción</p>
+      </div>
+
+      <nav>
+        <button class="nav active" data-view="dashboard">Dashboard</button>
+        <button class="nav" data-view="avance">Avance semanal</button>
+        <button class="nav" data-view="gantt">Carta Gantt</button>
+        <button class="nav" data-view="bim">BIM 3D</button>
+        <button class="nav" data-view="camaras">Cámaras</button>
+        <button class="nav" data-view="tickets">Tickets</button>
+        <button class="nav" data-view="documentos">Documentos</button>
+        <button class="nav" data-view="pagos">Estados de pago</button>
+      </nav>
+
+      <div class="client-card">
+        <div class="avatar">JP</div>
+        <div>
+          <strong>Juan Pérez</strong>
+          <small>Cliente / Mandante</small>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <small>Proyecto activo</small>
+          <h1>Edificio Las Palmas</h1>
+        </div>
+        <div class="status">En ejecución</div>
+      </header>
+
+      <section id="dashboard" class="view active">
+        <div class="hero">
+          <div>
+            <h2>Control digital de obras en tiempo real.</h2>
+            <p>Resumen ejecutivo actualizado con avance físico, planificación, pagos, documentos y decisiones pendientes.</p>
+          </div>
+          <button class="primary">Descargar reporte semanal</button>
+        </div>
+
+        <div class="kpis">
+          <article><small>Avance planificado</small><strong>52%</strong><div class="bar"><span style="width:52%"></span></div></article>
+          <article><small>Avance real</small><strong>47%</strong><div class="bar green"><span style="width:47%"></span></div></article>
+          <article><small>Desviación</small><strong class="danger">-5%</strong><p>Bajo planificación</p></article>
+          <article><small>Estado del plazo</small><strong class="warn">En observación</strong><p>Retraso estimado: 7 días</p></article>
+        </div>
+
+        <div class="grid">
+          <article class="panel wide">
+            <h3>Carta Gantt — resumen</h3>
+            <div class="gantt-mini">
+              <div>Excavaciones <span class="done"></span></div>
+              <div>Fundaciones <span class="done short"></span></div>
+              <div>Estructura <span class="run"></span></div>
+              <div>Albañilería <span class="late"></span></div>
+              <div>Instalaciones <span class="pending"></span></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h3>Avance semanal</h3>
+            <div class="photo"></div>
+            <p>Semana 8: estructura y canalizaciones eléctricas.</p>
+            <small>18 fotos · 2 videos · 1 documento</small>
+          </article>
+
+          <article class="panel">
+            <h3>Estados de pago</h3>
+            <div class="donut">67%</div>
+            <p><strong>$167.500.000</strong> pagado</p>
+            <p>Saldo pendiente: $82.500.000</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="avance" class="view">
+        <h2>Avance semanal</h2>
+        <div class="timeline">
+          <article>
+            <span>Semana 8</span>
+            <h3>Estructura y canalizaciones</h3>
+            <p>Se ejecutó avance en estructura del segundo nivel, canalizaciones eléctricas embebidas y revisión de interferencias.</p>
+            <div class="gallery"><div></div><div></div><div></div></div>
+          </article>
+          <article>
+            <span>Semana 7</span>
+            <h3>Radier y recepción de acero</h3>
+            <p>Se completó radier sector norte y recepción de materiales críticos.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="gantt" class="view">
+        <h2>Carta Gantt interactiva</h2>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>Actividad</th><th>Inicio</th><th>Término</th><th>Estado</th><th>Avance</th></tr></thead>
+            <tbody>
+              <tr><td>Excavaciones</td><td>01/05</td><td>08/05</td><td><span class="tag ok">Terminada</span></td><td>100%</td></tr>
+              <tr><td>Fundaciones</td><td>09/05</td><td>22/05</td><td><span class="tag ok">Terminada</span></td><td>100%</td></tr>
+              <tr><td>Estructura</td><td>23/05</td><td>18/06</td><td><span class="tag blue">En ejecución</span></td><td>64%</td></tr>
+              <tr><td>Albañilería</td><td>19/06</td><td>05/07</td><td><span class="tag red">Atrasada</span></td><td>12%</td></tr>
+              <tr><td>Instalaciones</td><td>06/07</td><td>30/07</td><td><span class="tag gray">Pendiente</span></td><td>0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="bim" class="view">
+        <h2>Modelo BIM 3D</h2>
+        <div class="bim-box">
+          <div class="cube">BIM</div>
+          <div>
+            <h3>Visualizador 3D conceptual</h3>
+            <p>En la versión real se integrará IFC.js, Speckle o Autodesk Viewer para navegar el modelo por capas.</p>
+            <ul>
+              <li>Arquitectura</li>
+              <li>Estructura</li>
+              <li>Sanitario</li>
+              <li>Eléctrico</li>
+              <li>Climatización</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="camaras" class="view">
+        <h2>Cámaras en vivo</h2>
+        <div class="camera-grid">
+          <div><span>EN VIVO</span></div><div><span>EN VIVO</span></div><div><span>TIMELAPSE</span></div><div><span>ACCESO</span></div>
+        </div>
+      </section>
+
+      <section id="tickets" class="view">
+        <h2>Tickets y aprobaciones</h2>
+        <div class="ticket-list">
+          <article><strong>Cambio porcelanato baño</strong><span class="tag yellow">En análisis</span></article>
+          <article><strong>Aprobación color fachada</strong><span class="tag red">Pendiente</span></article>
+          <article><strong>Consulta iluminación cocina</strong><span class="tag ok">Respondido</span></article>
+          <article><strong>Cambio puertas interiores</strong><span class="tag blue">Cotizado</span></article>
+        </div>
+        <button class="primary">+ Nuevo ticket</button>
+      </section>
+
+      <section id="documentos" class="view">
+        <h2>Documentos</h2>
+        <div class="docs">
+          <div>📁 01. Contrato</div><div>📁 02. Planos</div><div>📁 03. Permisos</div><div>📁 04. Presupuesto</div>
+          <div>📁 05. Especificaciones</div><div>📁 06. Estados de pago</div><div>📁 07. Órdenes de cambio</div><div>📁 08. Certificados</div>
+        </div>
+      </section>
+
+      <section id="pagos" class="view">
+        <h2>Estados de pago</h2>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>EP</th><th>Avance</th><th>Monto</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>EP N°1</td><td>15%</td><td>$37.500.000</td><td><span class="tag ok">Pagado</span></td></tr>
+              <tr><td>EP N°2</td><td>20%</td><td>$50.000.000</td><td><span class="tag ok">Pagado</span></td></tr>
+              <tr><td>EP N°3</td><td>20%</td><td>$50.000.000</td><td><span class="tag yellow">En revisión</span></td></tr>
+              <tr><td>EP N°4</td><td>15%</td><td>$37.500.000</td><td><span class="tag red">Pendiente</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
