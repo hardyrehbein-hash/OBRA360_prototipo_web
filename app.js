@@ -89,3 +89,19 @@ behavior:"smooth"
 
 });
 });
+document.getElementById("volverSolicitudes")
+.addEventListener("click", () => {
+
+document.querySelectorAll(".view").forEach(v => {
+v.style.display = "none";
+});
+
+document.getElementById("solicitudescambios")
+.style.display = "block";
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+});
