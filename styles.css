@@ -30,3 +30,91 @@ main{flex:1;padding:24px 32px 40px}.topbar{display:flex;justify-content:space-be
 .ticket-list{display:grid;gap:12px;margin-bottom:16px}.ticket-list article{display:flex;justify-content:space-between;align-items:center}
 .docs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.docs div{background:#fff;border:1px solid #e1e7ef;border-radius:14px;padding:18px;font-weight:800}
 @media(max-width:900px){.app{display:block}.sidebar{width:100%;border-radius:0}.grid,.kpis,.camera-grid,.docs,.bim-box{grid-template-columns:1fr}.hero{display:block}.topbar{align-items:flex-start;gap:12px}.sidebar nav{grid-template-columns:repeat(2,1fr)}}
+.login-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    linear-gradient(135deg,#0b1220 0%,#111827 100%);
+  padding:40px;
+}
+
+.login-card{
+  width:100%;
+  max-width:700px;
+  background:#ffffff;
+  border-radius:24px;
+  padding:60px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.25);
+}
+
+.login-logo{
+  font-size:42px;
+  font-weight:800;
+  color:#0f172a;
+  margin-bottom:10px;
+}
+
+.login-logo span{
+  color:#f97316;
+}
+
+.login-subtitle{
+  color:#64748b;
+  font-size:14px;
+  margin-bottom:30px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.login-card h1{
+  font-size:48px;
+  line-height:1.1;
+  margin-bottom:24px;
+  color:#0f172a;
+}
+
+.login-text{
+  font-size:18px;
+  line-height:1.7;
+  color:#475569;
+  margin-bottom:40px;
+}
+
+.login-actions{
+  display:flex;
+  gap:16px;
+  margin-bottom:30px;
+}
+
+.login-actions button{
+  border:none;
+  border-radius:14px;
+  padding:18px 28px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.primary{
+  background:#f97316;
+  color:white;
+}
+
+.primary:hover{
+  transform:translateY(-2px);
+  opacity:.95;
+}
+
+.secondary{
+  background:#e2e8f0;
+  color:#0f172a;
+}
+
+.secondary:hover{
+  transform:translateY(-2px);
+  background:#cbd5e1;
+}
