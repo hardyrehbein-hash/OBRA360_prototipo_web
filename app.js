@@ -10,3 +10,15 @@ buttons.forEach(btn => {
     window.scrollTo({top:0, behavior:'smooth'});
   });
 });
+const loginScreen = document.getElementById("loginScreen");
+const app = document.querySelector(".app");
+
+document.getElementById("enterClient").addEventListener("click", () => {
+  loginScreen.style.display = "none";
+  app.style.display = "flex";
+});
+
+document.getElementById("enterAdmin").addEventListener("click", () => {
+  loginScreen.style.display = "none";
+  app.style.display = "flex";
+});

@@ -118,3 +118,6 @@ main{flex:1;padding:24px 32px 40px}.topbar{display:flex;justify-content:space-be
   transform:translateY(-2px);
   background:#cbd5e1;
 }
+.app{
+  display:none;
+}
