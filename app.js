@@ -15,7 +15,7 @@ const app = document.querySelector(".app");
 
 const loginBox = document.getElementById("loginBox");
 const loginTitle = document.getElementById("loginTitle");
-
+let currentRole = "Demo";
 function abrirDashboard() {
   loginScreen.style.display = "none";
   loginBox.classList.remove("active");
@@ -27,10 +27,11 @@ document.getElementById("enterClient").addEventListener("click", () => {
   loginBox.classList.add("active");
   loginTitle.innerText = "Acceso Cliente";
 });
-
+currentRole = "Cliente";
 document.getElementById("enterAdmin").addEventListener("click", () => {
   loginBox.classList.add("active");
   loginTitle.innerText = "Acceso Administrador";
+  currentRole = "Administrador";
 });
 
 document.getElementById("enterDemo").addEventListener("click", abrirDashboard);
