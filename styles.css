@@ -121,3 +121,107 @@ main{flex:1;padding:24px 32px 40px}.topbar{display:flex;justify-content:space-be
 .app{
   display:none;
 }
+.landing-hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  align-items:center;
+  gap:60px;
+  padding:80px;
+  background:
+    radial-gradient(circle at top right,#1e293b 0%,#0f172a 45%,#020617 100%);
+}
+
+.landing-content{
+  max-width:700px;
+}
+
+.landing-content h1{
+  font-size:72px;
+  line-height:1;
+  margin-bottom:28px;
+  color:white;
+  font-weight:800;
+}
+
+.login-text{
+  font-size:20px;
+  line-height:1.8;
+  color:#cbd5e1;
+  margin-bottom:40px;
+}
+
+.login-logo{
+  font-size:52px;
+  font-weight:900;
+  color:white;
+  margin-bottom:10px;
+}
+
+.login-logo span{
+  color:#f97316;
+}
+
+.login-subtitle{
+  color:#94a3b8;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:30px;
+}
+
+.login-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+}
+
+.demo-btn{
+  background:#0f172a;
+  color:white;
+  border:1px solid #334155;
+}
+
+.demo-btn:hover{
+  background:#1e293b;
+}
+
+.landing-preview{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.preview-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(10px);
+  border-radius:24px;
+  padding:40px 24px;
+  color:white;
+  font-size:20px;
+  font-weight:700;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.25);
+  transition:.3s;
+}
+
+.preview-card:hover{
+  transform:translateY(-6px);
+  border-color:#f97316;
+}
+
+@media(max-width:1000px){
+
+  .landing-hero{
+    grid-template-columns:1fr;
+    padding:40px;
+  }
+
+  .landing-content h1{
+    font-size:48px;
+  }
+
+  .landing-preview{
+    grid-template-columns:1fr;
+  }
+}
