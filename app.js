@@ -73,3 +73,19 @@ document.getElementById("closeLogin").addEventListener("click", () => {
   loginBox.classList.remove("active");
 
 });
+document.querySelectorAll(".request-card").forEach(card => {
+card.addEventListener("click", () => {
+
+document.querySelectorAll(".view").forEach(v => {
+v.style.display = "none";
+});
+
+document.getElementById("detalleSolicitud").style.display = "block";
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+});
+});
