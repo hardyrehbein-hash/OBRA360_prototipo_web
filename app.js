@@ -126,3 +126,14 @@ behavior:"smooth"
 });
 
 }
+const aprobarSolicitud = document.querySelector("#detalleSolicitud #aprobarSolicitud");
+const estadoSolicitud = document.querySelector("#detalleSolicitud #estadoSolicitud");
+
+if (aprobarSolicitud && estadoSolicitud) {
+  aprobarSolicitud.addEventListener("click", () => {
+    estadoSolicitud.innerText = "Aprobada";
+    estadoSolicitud.className = "tag ok";
+    aprobarSolicitud.innerText = "Solicitud aprobada";
+    aprobarSolicitud.disabled = true;
+  });
+}
