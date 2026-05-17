@@ -35,4 +35,20 @@ document.getElementById("enterAdmin").addEventListener("click", () => {
 
 document.getElementById("enterDemo").addEventListener("click", abrirDashboard);
 
-document.getElementById("loginAccess").addEventListener("click", abrirDashboard);
+document.getElementById("loginAccess").addEventListener("click", () => {
+
+  const loader = document.getElementById("loginLoader");
+
+  loader.style.display = "block";
+
+  setTimeout(() => {
+    abrirDashboard();
+    loader.style.display = "none";
+  }, 1800);
+
+});
+document.getElementById("closeLogin").addEventListener("click", () => {
+
+  loginBox.classList.remove("active");
+
+});

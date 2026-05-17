@@ -298,3 +298,17 @@ main{flex:1;padding:24px 32px 40px}.topbar{display:flex;justify-content:space-be
   margin:0;
   border-radius:0 0 24px 24px;
 }
+.login-loader{
+  display:none;
+  margin-top:14px;
+  color:#9ed0ff;
+  font-size:14px;
+  font-weight:600;
+  animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+  0%{opacity:.4;}
+  50%{opacity:1;}
+  100%{opacity:.4;}
+}
