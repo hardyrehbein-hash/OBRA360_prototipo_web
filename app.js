@@ -38,17 +38,10 @@ function aplicarPermisos() {
 
     const menuPagos = document.getElementById("menuPagos");
     const menuDocs = document.getElementById("menuDocs");
-    const menuTickets = document.getElementById("menuTickets");
+      const menuTickets = document.getElementById("menuTickets");
 
-    if (currentRole === "Cliente") {
+    menuTickets.style.display = "";
 
-        menuTickets.style.display = "none";
-
-    } else {
-
-        menuTickets.style.display = "";
-
-    }
 }
 document.getElementById("enterClient").addEventListener("click", () => {
    loginBox.classList.add("active");
