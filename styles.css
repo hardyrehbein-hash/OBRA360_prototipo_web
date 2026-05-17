@@ -312,3 +312,15 @@ main{flex:1;padding:24px 32px 40px}.topbar{display:flex;justify-content:space-be
   50%{opacity:1;}
   100%{opacity:.4;}
 }
+.role-badge{
+    display:inline-block;
+    padding:8px 14px;
+    margin-bottom:10px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#ff8c42,#ffb347);
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.5px;
+    box-shadow:0 6px 18px rgba(255,140,66,.25);
+}

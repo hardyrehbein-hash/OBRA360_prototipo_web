@@ -72,14 +72,21 @@
       </div>
 
       <nav>
-        <button class="nav active" data-view="dashboard">Dashboard</button>
-        <button class="nav" data-view="avance">Avance semanal</button>
-        <button class="nav" data-view="gantt">Carta Gantt</button>
-        <button class="nav" data-view="bim">BIM 3D</button>
-        <button class="nav" data-view="camaras">Cámaras</button>
-        <button class="nav" data-view="tickets">Tickets</button>
-        <button class="nav" data-view="documentos">Documentos</button>
-        <button class="nav" data-view="pagos">Estados de pago</button>
+        <button id="menuDashboard" class="nav active" data-view="dashboard">Dashboard</button>
+
+<button id="menuAvance" class="nav" data-view="avance">Avance semanal</button>
+
+<button id="menuGantt" class="nav" data-view="gantt">Carta Gantt</button>
+
+<button id="menuBim" class="nav" data-view="bim">BIM 3D</button>
+
+<button id="menuCamaras" class="nav" data-view="camaras">Cámaras</button>
+
+<button id="menuTickets" class="nav" data-view="tickets">Tickets</button>
+
+<button id="menuDocs" class="nav" data-view="documentos">Documentos</button>
+
+<button id="menuPagos" class="nav" data-view="pagos">Estados de pago</button>
       </nav>
 
       <div class="client-card">
@@ -94,6 +101,9 @@
     <main>
       <header class="topbar">
         <div>
+          <div id="roleBadge" class="role-badge">
+  Dashboard Demo
+</div>
           <small>Proyecto activo</small>
           <h1>Edificio Las Palmas</h1>
         </div>
