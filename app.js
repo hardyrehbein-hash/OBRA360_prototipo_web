@@ -30,9 +30,9 @@ let currentRole = "Demo";
         ? "Portal Cliente"
         : "Dashboard Demo";
 
+    aplicarPermisos();
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    aplicarPermisos();
 }
 function aplicarPermisos() {
 
@@ -46,15 +46,15 @@ function aplicarPermisos() {
 
     } else {
 
-        menuTickets.style.display = "block";
+        menuTickets.style.display = "";
 
     }
 }
 document.getElementById("enterClient").addEventListener("click", () => {
-  loginBox.classList.add("active");
-  loginTitle.innerText = "Acceso Cliente";
+   loginBox.classList.add("active");
+    loginTitle.innerText = "Acceso Cliente";
+    currentRole = "Cliente";
 });
-currentRole = "Cliente";
 document.getElementById("enterAdmin").addEventListener("click", () => {
   loginBox.classList.add("active");
   loginTitle.innerText = "Acceso Administrador";
