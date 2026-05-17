@@ -13,12 +13,25 @@ buttons.forEach(btn => {
 const loginScreen = document.getElementById("loginScreen");
 const app = document.querySelector(".app");
 
+const loginBox = document.getElementById("loginBox");
+const loginTitle = document.getElementById("loginTitle");
+
 function abrirDashboard() {
   loginScreen.style.display = "none";
   app.style.display = "flex";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-document.getElementById("enterClient").addEventListener("click", abrirDashboard);
-document.getElementById("enterAdmin").addEventListener("click", abrirDashboard);
-document.querySelector(".demo-btn").addEventListener("click", abrirDashboard);
+document.getElementById("enterClient").addEventListener("click", () => {
+  loginBox.classList.add("active");
+  loginTitle.innerText = "Acceso Cliente";
+});
+
+document.getElementById("enterAdmin").addEventListener("click", () => {
+  loginBox.classList.add("active");
+  loginTitle.innerText = "Acceso Administrador";
+});
+
+document.getElementById("enterDemo").addEventListener("click", abrirDashboard);
+
+document.getElementById("loginAccess").addEventListener("click", abrirDashboard);
