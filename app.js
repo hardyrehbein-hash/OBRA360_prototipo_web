@@ -13,12 +13,12 @@ buttons.forEach(btn => {
 const loginScreen = document.getElementById("loginScreen");
 const app = document.querySelector(".app");
 
-document.getElementById("enterClient").addEventListener("click", () => {
+function abrirDashboard() {
   loginScreen.style.display = "none";
   app.style.display = "flex";
-});
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
-document.getElementById("enterAdmin").addEventListener("click", () => {
-  loginScreen.style.display = "none";
-  app.style.display = "flex";
-});
+document.getElementById("enterClient").addEventListener("click", abrirDashboard);
+document.getElementById("enterAdmin").addEventListener("click", abrirDashboard);
+document.getElementById("enterDemo").addEventListener("click", abrirDashboard);
