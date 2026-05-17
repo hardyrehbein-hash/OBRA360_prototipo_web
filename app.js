@@ -21,4 +21,4 @@ function abrirDashboard() {
 
 document.getElementById("enterClient").addEventListener("click", abrirDashboard);
 document.getElementById("enterAdmin").addEventListener("click", abrirDashboard);
-document.getElementById("enterDemo").addEventListener("click", abrirDashboard);
+document.querySelector(".demo-btn").addEventListener("click", abrirDashboard);
