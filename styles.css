@@ -452,17 +452,24 @@ font-size:28px;
 color:#222;
 }
 .secondary{
-background:white;
+display:inline-flex;
+align-items:center;
+gap:8px;
+background:#ffffff;
 border:none;
-padding:12px 18px;
+padding:12px 20px;
 border-radius:14px;
 font-weight:600;
+font-size:14px;
 cursor:pointer;
-margin-bottom:18px;
-box-shadow:0 6px 18px rgba(0,0,0,.06);
-transition:.2s;
+margin-bottom:22px;
+color:#333;
+box-shadow:0 8px 24px rgba(0,0,0,.08);
+transition:all .25s ease;
 }
 
 .secondary:hover{
 transform:translateY(-2px);
+background:#f6f6f6;
+box-shadow:0 12px 28px rgba(0,0,0,.12);
 }

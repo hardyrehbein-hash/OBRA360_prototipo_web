@@ -105,3 +105,24 @@ behavior:"smooth"
 });
 
 });
+const volverBtn = document.getElementById("volverSolicitudes");
+
+if(volverBtn){
+
+volverBtn.addEventListener("click", () => {
+
+document.querySelectorAll(".view").forEach(v => {
+v.style.display = "none";
+});
+
+document.getElementById("solicitudescambios")
+.style.display = "block";
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+});
+
+}
