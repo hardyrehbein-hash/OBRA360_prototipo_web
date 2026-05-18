@@ -128,12 +128,47 @@ behavior:"smooth"
 }
 const aprobarSolicitud = document.querySelector("#detalleSolicitud #aprobarSolicitud");
 const estadoSolicitud = document.querySelector("#detalleSolicitud #estadoSolicitud");
+const estadoCardSolicitud = document.querySelector("#solicitudescambios #estadoCardSolicitud");
 
-if (aprobarSolicitud && estadoSolicitud) {
-  aprobarSolicitud.addEventListener("click", () => {
+function marcarSolicitudAprobada() {
+
+  if (estadoSolicitud) {
     estadoSolicitud.innerText = "Aprobada";
     estadoSolicitud.className = "tag ok";
+  }
+
+  if (estadoCardSolicitud) {
+    estadoCardSolicitud.innerText = "Aprobada";
+    estadoCardSolicitud.className = "tag ok";
+  }
+
+  if (aprobarSolicitud) {
+
+    aprobarSolicitud.addEventListener("click", () => {
+
+        marcarSolicitudAprobada();
+
+        localStorage.setItem("solicitud024", "aprobada");
+
+        aprobarSolicitud.innerText = "Solicitud aprobada";
+        aprobarSolicitud.disabled = true;
+
+    });
+
+}
+}
+
+if (localStorage.getItem("solicitud024") === "aprobada") {
+  marcarSolicitudAprobada();
+}
+
+if (aprobarSolicitud) {
+  aprobarSolicitud.addEventListener("click", () => {
+
+    marcarSolicitudAprobada();
+
     aprobarSolicitud.innerText = "Solicitud aprobada";
     aprobarSolicitud.disabled = true;
-  });
+
+});
 }
