@@ -172,3 +172,31 @@ if (aprobarSolicitud) {
 
 });
 }
+const attachmentItems = document.querySelectorAll(".attachment-item");
+const fileModal = document.getElementById("fileModal");
+const fileModalTitle = document.getElementById("fileModalTitle");
+const closeFileModal = document.getElementById("closeFileModal");
+
+attachmentItems.forEach(item => {
+
+    item.addEventListener("click", () => {
+
+        const fileName = item.dataset.file;
+
+        fileModalTitle.innerText = fileName;
+
+        fileModal.classList.add("active");
+
+    });
+
+});
+
+if (closeFileModal) {
+
+    closeFileModal.addEventListener("click", () => {
+
+        fileModal.classList.remove("active");
+
+    });
+
+}
