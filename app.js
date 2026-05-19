@@ -232,5 +232,16 @@ if (closeFileModal) {
         fileModal.classList.remove("active");
 
     });
+const aprobarSolicitudBtn = document.getElementById("aprobarSolicitud");
+const approvalMessage = document.getElementById("approvalMessage");
 
+if(aprobarSolicitudBtn){
+
+    aprobarSolicitudBtn.addEventListener("click", () => {
+
+        approvalMessage.style.display = "block";
+
+    });
+
+}
 }
