@@ -186,23 +186,23 @@ attachmentItems.forEach(item => {
 
     if(fileName.endsWith(".pdf")){
 
-        preview.innerHTML = `
-            <iframe
-                src="assets/docs/cotizacion.pdf"
-                width="100%"
-                height="500px"
-                style="border:none;border-radius:12px;">
-            </iframe>
-        `;
+    preview.innerHTML = `
+    <iframe
+        src="assets/docs/${fileName}"
+        width="100%"
+        height="500px"
+        style="border:none;border-radius:12px;">
+    </iframe>
+`;
 
-    }
+}
 else if(fileName.endsWith(".jpg")){
 
     preview.innerHTML = `
-        <img
-            src="assets/docs/porcelanato.jpg"
-            style="width:100%; border-radius:12px;">
-    `;
+    <img
+        src="assets/docs/${fileName}"
+        style="width:100%; border-radius:12px;">
+`;
 
 }
         fileModalTitle.innerText = fileName;
