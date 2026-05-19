@@ -181,8 +181,30 @@ attachmentItems.forEach(item => {
 
     item.addEventListener("click", () => {
 
-        const fileName = item.dataset.file;
+    const fileName = item.dataset.file;
+    const preview = document.getElementById("filePreviewContent");
 
+    if(fileName.endsWith(".pdf")){
+
+        preview.innerHTML = `
+            <iframe
+                src="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
+                width="100%"
+                height="500px"
+                style="border:none;border-radius:12px;">
+            </iframe>
+        `;
+
+    }
+else if(fileName.endsWith(".jpg")){
+
+    preview.innerHTML = `
+        <img
+            src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"
+            style="width:100%; border-radius:12px;">
+    `;
+
+}
         fileModalTitle.innerText = fileName;
 
         fileModal.classList.add("active");
