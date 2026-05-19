@@ -247,13 +247,13 @@ if(aprobarSolicitudBtn){
     aprobarSolicitudBtn.addEventListener("click", () => {
 
         approvalMessage.style.display = "block";
-        alert("Botón aprobar funcionando");
 const timelineAprobacion = document.getElementById("timelineAprobacion");
 
 if(timelineAprobacion){
     timelineAprobacion.classList.add("active");
-}
-    });
+ }
 
-}
-}
+    aprobarSolicitudBtn.innerText = "Solicitud aprobada";
+    aprobarSolicitudBtn.disabled = true;
+
+});

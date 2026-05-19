@@ -734,3 +734,16 @@ transform:translateX(4px);
 #timelineAprobacion.active::before{
     background:#10b981;
 }
+#timelineAprobacion{
+    display:none;
+}
+
+#timelineAprobacion.active{
+    display:block;
+    background:#ecfdf5;
+    border:1px solid #10b981;
+}
+
+#timelineAprobacion.active::before{
+    background:#10b981;
+}
