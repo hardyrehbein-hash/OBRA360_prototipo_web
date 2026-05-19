@@ -222,3 +222,18 @@ if (closeFileModal) {
     });
 
 }
+const aprobarSolicitudBtn = document.getElementById("aprobarSolicitud");
+const approvalMessage = document.getElementById("approvalMessage");
+
+if(aprobarSolicitudBtn && approvalMessage){
+
+    aprobarSolicitudBtn.addEventListener("click", () => {
+
+        approvalMessage.style.display = "block";
+
+        aprobarSolicitudBtn.innerText = "Solicitud aprobada";
+        aprobarSolicitudBtn.disabled = true;
+
+    });
+
+}
