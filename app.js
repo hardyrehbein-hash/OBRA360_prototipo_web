@@ -158,16 +158,9 @@ function marcarSolicitudAprobada() {
 }
 }
 
-if (localStorage.getItem("solicitud24") === "aprobada") {
-    marcarSolicitudAprobada();
-
-    const timelineAprobacion = document.getElementById("timelineAprobacion");
-
-    if(timelineAprobacion){
-        timelineAprobacion.classList.add("active");
-    }
+if (localStorage.getItem("solicitud024") === "aprobada") {
+  marcarSolicitudAprobada();
 }
-
 
 if (aprobarSolicitud) {
   aprobarSolicitud.addEventListener("click", () => {
@@ -191,30 +184,18 @@ attachmentItems.forEach(item => {
     const fileName = item.dataset.file;
     const preview = document.getElementById("filePreviewContent");
 
-    if(fileName.includes("Plano")){
+    if(fileName.endsWith(".pdf")){
 
-    preview.innerHTML = `
-        <iframe
-            src="assets/docs/plano.pdf"
-            width="100%"
-            height="500px"
-            style="border:none;border-radius:12px;">
-        </iframe>
-    `;
+        preview.innerHTML = `
+            <iframe
+                src="assets/docs/cotizacion.pdf"
+                width="100%"
+                height="500px"
+                style="border:none;border-radius:12px;">
+            </iframe>
+        `;
 
-}
-else if(fileName.endsWith(".pdf")){
-
-    preview.innerHTML = `
-        <iframe
-            src="assets/docs/cotizacion.pdf"
-            width="100%"
-            height="500px"
-            style="border:none;border-radius:12px;">
-        </iframe>
-    `;
-
-}
+    }
 else if(fileName.endsWith(".jpg")){
 
     preview.innerHTML = `
@@ -239,21 +220,5 @@ if (closeFileModal) {
         fileModal.classList.remove("active");
 
     });
-const aprobarSolicitudBtn = document.getElementById("aprobarSolicitud");
-const approvalMessage = document.getElementById("approvalMessage");
 
-if(aprobarSolicitudBtn){
-
-    aprobarSolicitudBtn.addEventListener("click", () => {
-
-        approvalMessage.style.display = "block";
-const timelineAprobacion = document.getElementById("timelineAprobacion");
-
-if(timelineAprobacion){
-    timelineAprobacion.classList.add("active");
- }
-
-    aprobarSolicitudBtn.innerText = "Solicitud aprobada";
-    aprobarSolicitudBtn.disabled = true;
-
-});
+}
