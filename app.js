@@ -158,9 +158,16 @@ function marcarSolicitudAprobada() {
 }
 }
 
-if (localStorage.getItem("solicitud024") === "aprobada") {
-  marcarSolicitudAprobada();
+if (localStorage.getItem("solicitud24") === "aprobada") {
+    marcarSolicitudAprobada();
+
+    const timelineAprobacion = document.getElementById("timelineAprobacion");
+
+    if(timelineAprobacion){
+        timelineAprobacion.classList.add("active");
+    }
 }
+
 
 if (aprobarSolicitud) {
   aprobarSolicitud.addEventListener("click", () => {
@@ -240,7 +247,12 @@ if(aprobarSolicitudBtn){
     aprobarSolicitudBtn.addEventListener("click", () => {
 
         approvalMessage.style.display = "block";
+        alert("Botón aprobar funcionando");
+const timelineAprobacion = document.getElementById("timelineAprobacion");
 
+if(timelineAprobacion){
+    timelineAprobacion.classList.add("active");
+}
     });
 
 }
