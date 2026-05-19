@@ -184,23 +184,35 @@ attachmentItems.forEach(item => {
     const fileName = item.dataset.file;
     const preview = document.getElementById("filePreviewContent");
 
-    if(fileName.endsWith(".pdf")){
+    if(fileName.includes("Plano")){
 
-        preview.innerHTML = `
-            <iframe
-                src="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
-                width="100%"
-                height="500px"
-                style="border:none;border-radius:12px;">
-            </iframe>
-        `;
+    preview.innerHTML = `
+        <iframe
+            src="assets/docs/plano.pdf"
+            width="100%"
+            height="500px"
+            style="border:none;border-radius:12px;">
+        </iframe>
+    `;
 
-    }
+}
+else if(fileName.endsWith(".pdf")){
+
+    preview.innerHTML = `
+        <iframe
+            src="assets/docs/cotizacion.pdf"
+            width="100%"
+            height="500px"
+            style="border:none;border-radius:12px;">
+        </iframe>
+    `;
+
+}
 else if(fileName.endsWith(".jpg")){
 
     preview.innerHTML = `
         <img
-            src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"
+            src="assets/docs/porcelanato.jpg"
             style="width:100%; border-radius:12px;">
     `;
 
