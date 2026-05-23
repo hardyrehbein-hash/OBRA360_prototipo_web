@@ -272,7 +272,7 @@ if(guardarNuevaSolicitud){
             <span class="tag yellow">Pendiente constructora</span>
             <h3>${titulo}</h3>
             <p>${descripcion}</p>
-            <small>Ingresada hoy · Pendiente respuesta constructora</small>
+            <small>SOL-025 · Ingresada hoy · Pendiente respuesta constructora</small>
         `;
 
         if(contenedorSolicitudes){
@@ -284,7 +284,11 @@ if(guardarNuevaSolicitud){
         tituloSolicitud.value = "";
         descripcionSolicitud.value = "";
 
-        alert("Solicitud ingresada correctamente. La constructora fue notificada para análisis.");
+const mensajeNuevaSolicitud = document.getElementById("mensajeNuevaSolicitud");
+
+if(mensajeNuevaSolicitud){
+    mensajeNuevaSolicitud.style.display = "block";
+}
 
     });
 }
