@@ -87,6 +87,9 @@
 <button id="menuDocs" class="nav" data-view="documentos">Documentos</button>
 
 <button id="menuPagos" class="nav" data-view="pagos">Estados de pago</button>
+<button class="menu-item" data-view="adminSolicitudes">
+    Gestión solicitudes
+</button>
       </nav>
 
       <div class="client-card">
@@ -274,7 +277,7 @@ riesgos y próximos hitos de obra.
         <h2>Solicitudes y Cambios</h2>
 <p class="section-subtitle">Gestione requerimientos, aprobaciones, adicionales y cambios de obra con respaldo digital.</p>
 
-<div class="request-grid">
+<div class="request-grid" id="requestGrid">
   <article class="request-card">
     <span id="estadoCardSolicitud" class="tag yellow">En análisis</span>
     <h3>Cambio porcelanato baño principal</h3>
@@ -303,9 +306,96 @@ riesgos y próximos hitos de obra.
     <small>Monto estimado: $1.250.000</small>
   </article>
 </div>
+<section id="adminSolicitudes" class="view">
+    <span class="pill">Panel constructora</span>
+    <h2>Gestión de solicitudes</h2>
+    <p>Controle solicitudes ingresadas por clientes, aprobaciones, rechazos y ajustes requeridos.</p>
 
-<button class="primary">+ Nueva solicitud</button>
-      </section>
+    <div class="status-grid">
+        <div class="status-card">
+            <small>Pendientes</small>
+            <h3>2</h3>
+        </div>
+
+        <div class="status-card">
+            <small>Aprobadas</small>
+            <h3>1</h3>
+        </div>
+
+        <div class="status-card">
+            <small>Rechazadas</small>
+            <h3>0</h3>
+        </div>
+    </div>
+
+    <div class="admin-request-list">
+        <article class="admin-request-card">
+            <span class="tag green">Aprobada</span>
+            <h3>Cambio porcelanato baño principal</h3>
+            <p>Cliente aprobó la modificación y la constructora fue notificada.</p>
+            <small>Cliente: Juan Pérez · Monto: $1.250.000 · Impacto: +3 días</small>
+        </article>
+
+        <article class="admin-request-card">
+            <span class="tag red">Pendiente aprobación</span>
+            <h3>Aprobación color fachada</h3>
+            <p>Cotización emitida. Requiere aprobación digital del mandante.</p>
+            <small>Cliente: Juan Pérez · Impacto estimado: +3 días</small>
+        </article>
+
+        <article class="admin-request-card">
+            <span class="tag blue">Cotizado</span>
+            <h3>Cambio puertas interiores</h3>
+            <p>Adicional cotizado y disponible para aprobación del cliente.</p>
+            <small>Monto estimado: $1.250.000</small>
+        </article>
+    </div>
+</section>
+<button id="abrirNuevaSolicitud" class="primary">
+  + Nueva solicitud
+</button>
+<div id="modalNuevaSolicitud" class="modal">
+
+    <div class="modal-content">
+
+        <button id="cerrarNuevaSolicitud" class="close-modal">
+            ×
+        </button>
+
+        <h2>Nueva solicitud de cambio</h2>
+
+        <div class="form-group">
+            <label>Título solicitud</label>
+            <input 
+                type="text" 
+                id="tituloSolicitud"
+                placeholder="Ej: Cambio revestimiento cocina"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Descripción</label>
+
+            <textarea 
+                id="descripcionSolicitud"
+                rows="5"
+                placeholder="Describa requerimiento solicitado..."
+            ></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Adjuntar referencia</label>
+
+            <input type="file">
+        </div>
+
+        <button id="guardarNuevaSolicitud" class="primary">
+            Enviar solicitud
+        </button>
+
+    </div>
+
+</div>
 <section id="detalleSolicitud" class="view">
 <button id="volverSolicitudes" class="secondary">
 ← Volver

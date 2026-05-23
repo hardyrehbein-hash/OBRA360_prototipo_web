@@ -129,7 +129,7 @@ behavior:"smooth"
 const aprobarSolicitud = document.querySelector("#detalleSolicitud #aprobarSolicitud");
 const estadoSolicitud = document.querySelector("#detalleSolicitud #estadoSolicitud");
 const estadoCardSolicitud = document.querySelector("#solicitudescambios #estadoCardSolicitud");
-
+const requestGrid = document.querySelector(".requests-grid");
 function marcarSolicitudAprobada() {
 
   if (estadoSolicitud) {
@@ -236,4 +236,55 @@ if(aprobarSolicitudBtn && approvalMessage){
 
     });
 
+}
+const abrirNuevaSolicitud = document.getElementById("abrirNuevaSolicitud");
+const modalNuevaSolicitud = document.getElementById("modalNuevaSolicitud");
+const cerrarNuevaSolicitud = document.getElementById("cerrarNuevaSolicitud");
+const guardarNuevaSolicitud = document.getElementById("guardarNuevaSolicitud");
+
+const tituloSolicitud = document.getElementById("tituloSolicitud");
+const descripcionSolicitud = document.getElementById("descripcionSolicitud");
+
+const contenedorSolicitudes = document.querySelector(".requests-grid") || document.querySelector(".request-grid");
+
+if(abrirNuevaSolicitud && modalNuevaSolicitud){
+    abrirNuevaSolicitud.addEventListener("click", () => {
+        modalNuevaSolicitud.classList.add("active");
+    });
+}
+
+if(cerrarNuevaSolicitud && modalNuevaSolicitud){
+    cerrarNuevaSolicitud.addEventListener("click", () => {
+        modalNuevaSolicitud.classList.remove("active");
+    });
+}
+
+if(guardarNuevaSolicitud){
+    guardarNuevaSolicitud.addEventListener("click", () => {
+
+        const titulo = tituloSolicitud.value || "Nueva solicitud cliente";
+        const descripcion = descripcionSolicitud.value || "Solicitud ingresada por cliente para revisión de constructora.";
+
+        const nuevaSolicitud = document.createElement("article");
+        nuevaSolicitud.className = "request-card";
+
+        nuevaSolicitud.innerHTML = `
+            <span class="tag yellow">Pendiente constructora</span>
+            <h3>${titulo}</h3>
+            <p>${descripcion}</p>
+            <small>Ingresada hoy · Pendiente respuesta constructora</small>
+        `;
+
+        if(contenedorSolicitudes){
+            contenedorSolicitudes.prepend(nuevaSolicitud);
+        }
+
+        modalNuevaSolicitud.classList.remove("active");
+
+        tituloSolicitud.value = "";
+        descripcionSolicitud.value = "";
+
+        alert("Solicitud ingresada correctamente. La constructora fue notificada para análisis.");
+
+    });
 }
