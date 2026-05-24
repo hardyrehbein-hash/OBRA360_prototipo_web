@@ -337,3 +337,77 @@ if(btnAdminSolicitudes && adminSolicitudesView){
     });
 
 }
+function cargarSolicitudesGuardadas(){
+
+    const solicitudesGuardadas = JSON.parse(localStorage.getItem("obra360_solicitudes")) || [];
+
+    const contenedorSolicitudes = document.querySelector(".requests-grid") || document.querySelector(".request-grid");
+    const kanbanPendientes = document.getElementById("kanbanPendientes");
+
+    solicitudesGuardadas.forEach(solicitud => {
+
+        if(contenedorSolicitudes){
+
+            const tarjetaCliente = document.createElement("article");
+            tarjetaCliente.className = "request-card";
+
+            tarjetaCliente.innerHTML = `
+                <span class="tag yellow">${solicitud.estado}</span>
+                <h3>${solicitud.titulo}</h3>
+                <p>${solicitud.descripcion}</p>
+                <small>${solicitud.codigo} · ${solicitud.fecha} · Pendiente respuesta constructora</small>
+            `;
+
+            contenedorSolicitudes.prepend(tarjetaCliente);
+        }
+
+        if(kanbanPendientes){
+
+            const tarjetaKanban = document.createElement("article");
+            tarjetaKanban.className = "kanban-card";
+
+            tarjetaKanban.innerHTML = `
+                <span class="tag yellow">Pendiente revisión</span>
+                <h4>${solicitud.codigo} · ${solicitud.titulo}</h4>
+                <p>${solicitud.descripcion}</p>
+                <small>Cliente: Juan Pérez · ${solicitud.fecha}</small>
+            `;
+
+            kanbanPendientes.appendChild(tarjetaKanban);
+        }
+
+    });
+}
+
+cargarSolicitudesGuardadas();
+const modalCotizar = document.getElementById("modalCotizar");
+const cerrarModalCotizar = document.getElementById("cerrarModalCotizar");
+const enviarCotizacion = document.getElementById("enviarCotizacion");
+
+document.querySelectorAll(".btn-cotizar").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+        modalCotizar.classList.add("active");
+    });
+
+});
+
+if(cerrarModalCotizar){
+
+    cerrarModalCotizar.addEventListener("click", () => {
+        modalCotizar.classList.remove("active");
+    });
+
+}
+
+if(enviarCotizacion){
+
+    enviarCotizacion.addEventListener("click", () => {
+
+        modalCotizar.classList.remove("active");
+
+        alert("Cotización enviada correctamente al cliente para aprobación.");
+
+    });
+
+}

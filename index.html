@@ -371,6 +371,9 @@ riesgos y próximos hitos de obra.
                 <h4>SOL-025 · Cambio tejas terraza</h4>
                 <p>Cliente solicita evaluación para cambio de cubierta en terraza.</p>
                 <small>Cliente: Juan Pérez · Ingresada hoy</small>
+                <button class="secondary btn-cotizar">
+                    Cotizar
+                </button>
             </article>
         </div>
 
@@ -399,6 +402,59 @@ riesgos y próximos hitos de obra.
     </div>
 
 </section>
+<div id="modalCotizar" class="modal">
+
+    <div class="modal-content">
+
+        <button id="cerrarModalCotizar" class="close-modal">
+            ×
+        </button>
+
+        <h2>Cotizar solicitud</h2>
+
+        <p>
+            Complete los antecedentes técnicos y económicos para enviar la cotización al cliente.
+        </p>
+
+        <div class="form-group">
+            <label>Monto cotización</label>
+            <input 
+                type="text" 
+                id="montoCotizacion"
+                placeholder="Ej: $1.250.000"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Impacto en plazo</label>
+            <input 
+                type="text" 
+                id="plazoCotizacion"
+                placeholder="Ej: +3 días"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Comentario técnico</label>
+            <textarea 
+                id="comentarioCotizacion"
+                rows="5"
+                placeholder="Detalle técnico, alcance, exclusiones o condiciones..."
+            ></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Adjuntar presupuesto / respaldo</label>
+            <input type="file" id="archivoCotizacion">
+        </div>
+
+        <button id="enviarCotizacion" class="primary">
+            Enviar cotización al cliente
+        </button>
+
+    </div>
+
+</div>
 <section id="detalleSolicitud" class="view">
 <button id="volverSolicitudes" class="secondary">
 ← Volver
