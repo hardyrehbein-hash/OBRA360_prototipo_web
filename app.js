@@ -340,9 +340,9 @@ if(btnAdminSolicitudes && adminSolicitudesView){
 function cargarSolicitudesGuardadas(){
 
     const solicitudesGuardadas = JSON.parse(localStorage.getItem("obra360_solicitudes")) || [];
-
     const contenedorSolicitudes = document.querySelector(".requests-grid") || document.querySelector(".request-grid");
     const kanbanPendientes = document.getElementById("kanbanPendientes");
+    const kanbanCotizadas = document.getElementById("kanbanCotizadas");
 
     solicitudesGuardadas.forEach(solicitud => {
 
@@ -352,7 +352,7 @@ function cargarSolicitudesGuardadas(){
             tarjetaCliente.className = "request-card";
 
             tarjetaCliente.innerHTML = `
-                <span class="tag yellow">${solicitud.estado}</span>
+                <span class="tag ${solicitud.estado === "Cotizada" ? "yellow" : "yellow"}">${solicitud.estado}</span>
                 <h3>${solicitud.titulo}</h3>
                 <p>${solicitud.descripcion}</p>
                 <small>${solicitud.codigo} · ${solicitud.fecha} · Pendiente respuesta constructora</small>
@@ -361,10 +361,23 @@ function cargarSolicitudesGuardadas(){
             contenedorSolicitudes.prepend(tarjetaCliente);
         }
 
-        if(kanbanPendientes){
+        const tarjetaKanban = document.createElement("article");
+        tarjetaKanban.className = "kanban-card";
 
-            const tarjetaKanban = document.createElement("article");
-            tarjetaKanban.className = "kanban-card";
+        if(solicitud.estado === "Cotizada"){
+
+            tarjetaKanban.innerHTML = `
+                <span class="tag green">Cotización enviada</span>
+                <h4>${solicitud.codigo} · ${solicitud.titulo}</h4>
+                <p>${solicitud.comentarioCotizacion || solicitud.descripcion}</p>
+                <small>Monto: ${solicitud.monto || "$1.250.000"} · Plazo: ${solicitud.plazo || "+3 días"}</small>
+            `;
+
+            if(kanbanCotizadas){
+                kanbanCotizadas.appendChild(tarjetaKanban);
+            }
+
+        }else{
 
             tarjetaKanban.innerHTML = `
                 <span class="tag yellow">Pendiente revisión</span>
@@ -372,55 +385,25 @@ function cargarSolicitudesGuardadas(){
                 <p>${solicitud.descripcion}</p>
                 <small>Cliente: Juan Pérez · ${solicitud.fecha}</small>
 
-<button class="secondary btn-cotizar">
-    Cotizar
-</button>
+                <button class="secondary btn-cotizar">
+                    Cotizar
+                </button>
             `;
 
-            kanbanPendientes.appendChild(tarjetaKanban);if(solicitud.estado === "Cotizada"){
+            if(kanbanPendientes){
+                kanbanPendientes.appendChild(tarjetaKanban);
+            }
 
-    const kanbanCotizadas = document.getElementById("kanbanCotizadas");
-
-    tarjetaKanban.innerHTML = `
-        <span class="tag green">Cotización enviada</span>
-        <h4>${solicitud.codigo} · ${solicitud.titulo}</h4>
-        <p>${solicitud.comentarioCotizacion || solicitud.descripcion}</p>
-        <small>Monto: ${solicitud.monto || "$1.250.000"} · Plazo: ${solicitud.plazo || "+3 días"}</small>
-    `;
-
-    if(kanbanCotizadas){
-        kanbanCotizadas.appendChild(tarjetaKanban);
-    }
-
-}else{
-
-    kanbanPendientes.appendChild(tarjetaKanban);
-
-    const botonCotizar = tarjetaKanban.querySelector(".btn-cotizar");
-
-    if(botonCotizar){
-        botonCotizar.addEventListener("click", () => {
-            modalCotizar.classList.add("active");
-        });
-    }
-
-}
             const botonCotizar = tarjetaKanban.querySelector(".btn-cotizar");
 
-if(botonCotizar){
-
-    botonCotizar.addEventListener("click", () => {
-
-        modalCotizar.classList.add("active");
-
-    });
-
-}
+            if(botonCotizar){
+                botonCotizar.addEventListener("click", () => {
+                    document.getElementById("modalCotizar").classList.add("active");
+                });
+            }
         }
-
     });
 }
-
 cargarSolicitudesGuardadas();
 const modalCotizar = document.getElementById("modalCotizar");
 const cerrarModalCotizar = document.getElementById("cerrarModalCotizar");
