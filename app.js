@@ -377,7 +377,34 @@ function cargarSolicitudesGuardadas(){
 </button>
             `;
 
-            kanbanPendientes.appendChild(tarjetaKanban);
+            kanbanPendientes.appendChild(tarjetaKanban);if(solicitud.estado === "Cotizada"){
+
+    const kanbanCotizadas = document.getElementById("kanbanCotizadas");
+
+    tarjetaKanban.innerHTML = `
+        <span class="tag green">Cotización enviada</span>
+        <h4>${solicitud.codigo} · ${solicitud.titulo}</h4>
+        <p>${solicitud.comentarioCotizacion || solicitud.descripcion}</p>
+        <small>Monto: ${solicitud.monto || "$1.250.000"} · Plazo: ${solicitud.plazo || "+3 días"}</small>
+    `;
+
+    if(kanbanCotizadas){
+        kanbanCotizadas.appendChild(tarjetaKanban);
+    }
+
+}else{
+
+    kanbanPendientes.appendChild(tarjetaKanban);
+
+    const botonCotizar = tarjetaKanban.querySelector(".btn-cotizar");
+
+    if(botonCotizar){
+        botonCotizar.addEventListener("click", () => {
+            modalCotizar.classList.add("active");
+        });
+    }
+
+}
             const botonCotizar = tarjetaKanban.querySelector(".btn-cotizar");
 
 if(botonCotizar){
@@ -419,9 +446,25 @@ if(enviarCotizacion){
 
     enviarCotizacion.addEventListener("click", () => {
 
+        const monto = document.getElementById("montoCotizacion").value || "$1.250.000";
+        const plazo = document.getElementById("plazoCotizacion").value || "+3 días";
+        const comentario = document.getElementById("comentarioCotizacion").value || "Cotización emitida por constructora.";
+
+        const solicitudesGuardadas = JSON.parse(localStorage.getItem("obra360_solicitudes")) || [];
+
+        if(solicitudesGuardadas.length > 0){
+
+            solicitudesGuardadas[0].estado = "Cotizada";
+            solicitudesGuardadas[0].monto = monto;
+            solicitudesGuardadas[0].plazo = plazo;
+            solicitudesGuardadas[0].comentarioCotizacion = comentario;
+
+            localStorage.setItem("obra360_solicitudes", JSON.stringify(solicitudesGuardadas));
+        }
+
         modalCotizar.classList.remove("active");
 
-        alert("Cotización enviada correctamente al cliente para aprobación.");
+        location.reload();
 
     });
 
