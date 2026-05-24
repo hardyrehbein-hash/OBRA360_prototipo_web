@@ -87,7 +87,7 @@
 <button id="menuDocs" class="nav" data-view="documentos">Documentos</button>
 
 <button id="menuPagos" class="nav" data-view="pagos">Estados de pago</button>
-<button class="menu-item" data-view="adminSolicitudes">
+<button id="btnAdminSolicitudes" class="nav" data-view="adminSolicitudes">
     Gestión solicitudes
 </button>
       </nav>
@@ -306,51 +306,7 @@ riesgos y próximos hitos de obra.
     <small>Monto estimado: $1.250.000</small>
   </article>
 </div>
-<section id="adminSolicitudes" class="view">
-    <span class="pill">Panel constructora</span>
-    <h2>Gestión de solicitudes</h2>
-    <p>Controle solicitudes ingresadas por clientes, aprobaciones, rechazos y ajustes requeridos.</p>
 
-    <div class="status-grid">
-        <div class="status-card">
-            <small>Pendientes</small>
-            <h3>2</h3>
-        </div>
-
-        <div class="status-card">
-            <small>Aprobadas</small>
-            <h3>1</h3>
-        </div>
-
-        <div class="status-card">
-            <small>Rechazadas</small>
-            <h3>0</h3>
-        </div>
-    </div>
-
-    <div class="admin-request-list">
-        <article class="admin-request-card">
-            <span class="tag green">Aprobada</span>
-            <h3>Cambio porcelanato baño principal</h3>
-            <p>Cliente aprobó la modificación y la constructora fue notificada.</p>
-            <small>Cliente: Juan Pérez · Monto: $1.250.000 · Impacto: +3 días</small>
-        </article>
-
-        <article class="admin-request-card">
-            <span class="tag red">Pendiente aprobación</span>
-            <h3>Aprobación color fachada</h3>
-            <p>Cotización emitida. Requiere aprobación digital del mandante.</p>
-            <small>Cliente: Juan Pérez · Impacto estimado: +3 días</small>
-        </article>
-
-        <article class="admin-request-card">
-            <span class="tag blue">Cotizado</span>
-            <h3>Cambio puertas interiores</h3>
-            <p>Adicional cotizado y disponible para aprobación del cliente.</p>
-            <small>Monto estimado: $1.250.000</small>
-        </article>
-    </div>
-</section>
 <button id="abrirNuevaSolicitud" class="primary">
   + Nueva solicitud
 </button>
@@ -399,6 +355,50 @@ riesgos y próximos hitos de obra.
     </div>
 
 </div>
+</section>
+<section id="adminSolicitudes" class="view">
+    <span class="pill">Panel constructora</span>
+    <h2>Gestión solicitudes clientes</h2>
+    <p>Administre solicitudes de cambios, aprobaciones y cotizaciones enviadas por clientes.</p>
+
+    <div class="kanban-board">
+
+        <div class="kanban-column">
+            <h3>Pendientes</h3>
+
+            <article class="kanban-card">
+                <span class="tag yellow">Pendiente revisión</span>
+                <h4>SOL-025 · Cambio tejas terraza</h4>
+                <p>Cliente solicita evaluación para cambio de cubierta en terraza.</p>
+                <small>Cliente: Juan Pérez · Ingresada hoy</small>
+            </article>
+        </div>
+
+        <div class="kanban-column">
+            <h3>En análisis</h3>
+
+            <article class="kanban-card">
+                <span class="tag blue">En análisis técnico</span>
+                <h4>SOL-021 · Cambio iluminación cocina</h4>
+                <p>Constructora revisa factibilidad técnica y costos asociados.</p>
+                <small>Impacto preliminar: +2 días</small>
+            </article>
+        </div>
+
+        <div class="kanban-column">
+            <h3>Cotizadas</h3>
+
+            <article class="kanban-card">
+                <span class="tag green">Cotización enviada</span>
+                <h4>SOL-018 · Cambio puertas interiores</h4>
+                <p>Cotización enviada al cliente, pendiente aprobación.</p>
+                <small>Monto adicional: $1.250.000</small>
+            </article>
+        </div>
+
+    </div>
+
+</section>
 <section id="detalleSolicitud" class="view">
 <button id="volverSolicitudes" class="secondary">
 ← Volver

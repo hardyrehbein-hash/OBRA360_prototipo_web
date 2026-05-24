@@ -292,3 +292,20 @@ if(mensajeNuevaSolicitud){
 
     });
 }
+const btnAdminSolicitudes = document.getElementById("btnAdminSolicitudes");
+const adminSolicitudesView = document.getElementById("adminSolicitudes");
+const todasLasVistas = document.querySelectorAll(".view");
+
+if(btnAdminSolicitudes && adminSolicitudesView){
+
+    btnAdminSolicitudes.addEventListener("click", () => {
+
+        todasLasVistas.forEach(vista => {
+            vista.classList.remove("active");
+        });
+
+        adminSolicitudesView.classList.add("active");
+
+    });
+
+}
