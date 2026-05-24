@@ -276,9 +276,37 @@ if(guardarNuevaSolicitud){
         `;
 
         if(contenedorSolicitudes){
-            contenedorSolicitudes.prepend(nuevaSolicitud);
-        }
 
+    contenedorSolicitudes.prepend(nuevaSolicitud);
+
+    const kanbanPendientes = document.getElementById("kanbanPendientes");
+
+    if(kanbanPendientes){
+
+        const nuevaKanban = document.createElement("article");
+        nuevaKanban.className = "kanban-card";
+
+        nuevaKanban.innerHTML = `
+            <span class="tag yellow">Pendiente revisión</span>
+            <h4>SOL-025 · ${titulo}</h4>
+            <p>${descripcion}</p>
+            <small>Cliente: Juan Pérez · Ingresada hoy</small>
+        `;
+
+        kanbanPendientes.appendChild(nuevaKanban);
+    }
+}
+const solicitudesGuardadas = JSON.parse(localStorage.getItem("obra360_solicitudes")) || [];
+
+solicitudesGuardadas.unshift({
+    codigo: "SOL-025",
+    titulo: titulo,
+    descripcion: descripcion,
+    estado: "Pendiente constructora",
+    fecha: "Ingresada hoy"
+});
+
+localStorage.setItem("obra360_solicitudes", JSON.stringify(solicitudesGuardadas));
         modalNuevaSolicitud.classList.remove("active");
 
         tituloSolicitud.value = "";
