@@ -371,9 +371,24 @@ function cargarSolicitudesGuardadas(){
                 <h4>${solicitud.codigo} · ${solicitud.titulo}</h4>
                 <p>${solicitud.descripcion}</p>
                 <small>Cliente: Juan Pérez · ${solicitud.fecha}</small>
+
+<button class="secondary btn-cotizar">
+    Cotizar
+</button>
             `;
 
             kanbanPendientes.appendChild(tarjetaKanban);
+            const botonCotizar = tarjetaKanban.querySelector(".btn-cotizar");
+
+if(botonCotizar){
+
+    botonCotizar.addEventListener("click", () => {
+
+        modalCotizar.classList.add("active");
+
+    });
+
+}
         }
 
     });
