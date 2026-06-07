@@ -274,15 +274,17 @@ if(guardarNuevaSolicitud){
 
         const titulo = tituloSolicitud.value || "Nueva solicitud cliente";
         const descripcion = descripcionSolicitud.value || "Solicitud ingresada por cliente para revisión de constructora.";
-
+const tipo = document.getElementById("tipoSolicitud")?.value || "Sin categoría";
+const prioridad = document.getElementById("prioridadSolicitud")?.value || "Normal";
         const nuevaSolicitud = document.createElement("article");
         nuevaSolicitud.className = "request-card";
 
         nuevaSolicitud.innerHTML = `
-            <span class="tag yellow">Pendiente constructora</span>
-            <h3>${titulo}</h3>
-            <p>${descripcion}</p>
-            <small>SOL-025 · Ingresada hoy · Pendiente respuesta constructora</small>
+           <span class="tag yellow">Pendiente constructora</span>
+<small>${tipo} · Prioridad ${prioridad}</small>
+<h3>${titulo}</h3>
+<p>${descripcion}</p>
+<small>SOL-025 · Ingresada hoy · Pendiente respuesta constructora</small>
         `;
 
         if(contenedorSolicitudes){
