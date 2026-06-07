@@ -276,7 +276,8 @@ if(guardarNuevaSolicitud){
         const descripcion = descripcionSolicitud.value || "Solicitud ingresada por cliente para revisión de constructora.";
 const tipo = document.getElementById("tipoSolicitud")?.value || "Sin categoría";
 const prioridad = document.getElementById("prioridadSolicitud")?.value || "Normal";
-        const nuevaSolicitud = document.createElement("article");
+      const numeroSolicitud = "SOL-" + Math.floor(Math.random() * 900 + 100);  
+const nuevaSolicitud = document.createElement("article");
         nuevaSolicitud.className = "request-card";
 
         nuevaSolicitud.innerHTML = `
@@ -284,7 +285,7 @@ const prioridad = document.getElementById("prioridadSolicitud")?.value || "Norma
 <small>${tipo} · Prioridad ${prioridad}</small>
 <h3>${titulo}</h3>
 <p>${descripcion}</p>
-<small>SOL-025 · Ingresada hoy · Pendiente respuesta constructora</small>
+<small>${numeroSolicitud} · Ingresada hoy · Pendiente respuesta constructora</small>
         `;
 
         if(contenedorSolicitudes){
@@ -300,7 +301,7 @@ const prioridad = document.getElementById("prioridadSolicitud")?.value || "Norma
 
         nuevaKanban.innerHTML = `
             <span class="tag yellow">Pendiente revisión</span>
-            <h4>SOL-025 · ${titulo}</h4>
+            <h4>${numeroSolicitud} · ${titulo}</h4>
             <p>${descripcion}</p>
             <small>Cliente: Juan Pérez · Ingresada hoy</small>
         `;
