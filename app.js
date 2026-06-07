@@ -36,11 +36,21 @@ let currentRole = "Demo";
 }
 function aplicarPermisos() {
 
-    const menuPagos = document.getElementById("menuPagos");
-    const menuDocs = document.getElementById("menuDocs");
-      const menuTickets = document.getElementById("menuTickets");
+    const btnAdminSolicitudes = document.getElementById("btnAdminSolicitudes");
 
-    menuTickets.style.display = "";
+    if(currentRole === "Administrador"){
+
+        if(btnAdminSolicitudes){
+            btnAdminSolicitudes.style.display = "";
+        }
+
+    }else{
+
+        if(btnAdminSolicitudes){
+            btnAdminSolicitudes.style.display = "none";
+        }
+
+    }
 
 }
 document.getElementById("enterClient").addEventListener("click", () => {
