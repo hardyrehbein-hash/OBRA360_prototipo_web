@@ -364,7 +364,7 @@ function cargarSolicitudesGuardadas(){
     const contenedorSolicitudes = document.querySelector(".requests-grid") || document.querySelector(".request-grid");
     const kanbanPendientes = document.getElementById("kanbanPendientes");
     const kanbanCotizadas = document.getElementById("kanbanCotizadas");
-
+const kanbanRespuestasCliente = document.getElementById("kanbanRespuestasCliente");
     solicitudesGuardadas.forEach(solicitud => {
 
         if(contenedorSolicitudes){
@@ -372,20 +372,54 @@ function cargarSolicitudesGuardadas(){
             const tarjetaCliente = document.createElement("article");
             tarjetaCliente.className = "request-card";
 
-            tarjetaCliente.innerHTML = `
-                <span class="tag ${solicitud.estado === "Cotizada" ? "yellow" : "yellow"}">${solicitud.estado}</span>
-                <h3>${solicitud.titulo}</h3>
-                <p>${solicitud.descripcion}</p>
-                <small>${solicitud.codigo} · ${solicitud.fecha} · Pendiente respuesta constructora</small>
-            `;
+          tarjetaCliente.innerHTML = `
+    <span class="tag ${solicitud.estado === "Cotizada" ? "green" : "yellow"}">${solicitud.estado}</span>
+    <h3>${solicitud.titulo}</h3>
+    <p>${solicitud.descripcion}</p>
+    <small>${solicitud.codigo} · ${solicitud.fecha}</small>
+
+    ${solicitud.estado === "Cotizada" ? `
+        <p><strong>Monto:</strong> ${solicitud.monto || "Pendiente"}</p>
+        <p><strong>Plazo:</strong> ${solicitud.plazo || "Pendiente"}</p>
+        <p>${solicitud.comentarioCotizacion || ""}</p>
+
+        <div class="approval-actions">
+            <button class="primary btn-aprobar-cliente" data-codigo="${solicitud.codigo}">Aprobar</button>
+            <button class="secondary btn-rechazar-cliente" data-codigo="${solicitud.codigo}">Rechazar</button>
+        </div>
+    ` : ""}
+`;
 
             contenedorSolicitudes.prepend(tarjetaCliente);
         }
 
         const tarjetaKanban = document.createElement("article");
         tarjetaKanban.className = "kanban-card";
+if(
+    solicitud.estado === "Aprobada por cliente" ||
+    solicitud.estado === "Rechazada por cliente"
+){
 
-        if(solicitud.estado === "Cotizada"){
+    tarjetaKanban.innerHTML = `
+        <span class="tag ${solicitud.estado === "Aprobada por cliente" ? "green" : "red"}">
+            ${solicitud.estado}
+        </span>
+
+        <h4>${solicitud.codigo} · ${solicitud.titulo}</h4>
+
+        <p>${solicitud.comentarioCotizacion || solicitud.descripcion}</p>
+
+        <small>
+            Monto: ${solicitud.monto || "-"}
+            · Plazo: ${solicitud.plazo || "-"}
+        </small>
+    `;
+
+    if(kanbanRespuestasCliente){
+        kanbanRespuestasCliente.appendChild(tarjetaKanban);
+    }
+
+}else if(solicitud.estado === "Cotizada"){
 
             tarjetaKanban.innerHTML = `
                 <span class="tag green">Cotización enviada</span>
@@ -478,3 +512,30 @@ if(solicitudCotizada){
     });
 
 }
+document.querySelectorAll(".btn-aprobar-cliente").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const codigo = btn.dataset.codigo;
+        const solicitudesGuardadas = JSON.parse(localStorage.getItem("obra360_solicitudes")) || [];
+        const solicitud = solicitudesGuardadas.find(item => item.codigo === codigo);
+
+        if(solicitud){
+            solicitud.estado = "Aprobada por cliente";
+            localStorage.setItem("obra360_solicitudes", JSON.stringify(solicitudesGuardadas));
+            location.reload();
+        }
+    });
+});
+
+document.querySelectorAll(".btn-rechazar-cliente").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const codigo = btn.dataset.codigo;
+        const solicitudesGuardadas = JSON.parse(localStorage.getItem("obra360_solicitudes")) || [];
+        const solicitud = solicitudesGuardadas.find(item => item.codigo === codigo);
+
+        if(solicitud){
+            solicitud.estado = "Rechazada por cliente";
+            localStorage.setItem("obra360_solicitudes", JSON.stringify(solicitudesGuardadas));
+            location.reload();
+        }
+    });
+});
