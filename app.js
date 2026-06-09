@@ -276,7 +276,13 @@ if(guardarNuevaSolicitud){
         const descripcion = descripcionSolicitud.value || "Solicitud ingresada por cliente para revisión de constructora.";
 const tipo = document.getElementById("tipoSolicitud")?.value || "Sin categoría";
 const prioridad = document.getElementById("prioridadSolicitud")?.value || "Normal";
-      const numeroSolicitud = "SOL-" + Math.floor(Math.random() * 900 + 100);  
+     let ultimoNumeroSolicitud = parseInt(localStorage.getItem("obra360_ultimo_numero_solicitud")) || 25;
+
+ultimoNumeroSolicitud++;
+
+localStorage.setItem("obra360_ultimo_numero_solicitud", ultimoNumeroSolicitud);
+
+const numeroSolicitud = "SOL-" + String(ultimoNumeroSolicitud).padStart(3, "0");
 const nuevaSolicitud = document.createElement("article");
         nuevaSolicitud.className = "request-card";
 
@@ -312,7 +318,9 @@ const nuevaSolicitud = document.createElement("article");
 const solicitudesGuardadas = JSON.parse(localStorage.getItem("obra360_solicitudes")) || [];
 
 solicitudesGuardadas.unshift({
-    codigo: "SOL-025",
+    codigo: numeroSolicitud,
+    tipo: tipo,
+    prioridad: prioridad,
     titulo: titulo,
     descripcion: descripcion,
     estado: "Pendiente constructora",
@@ -398,7 +406,7 @@ function cargarSolicitudesGuardadas(){
                 <p>${solicitud.descripcion}</p>
                 <small>Cliente: Juan Pérez · ${solicitud.fecha}</small>
 
-                <button class="secondary btn-cotizar">
+                <button class="secondary btn-cotizar" data-codigo="${solicitud.codigo}">
                     Cotizar
                 </button>
             `;
@@ -411,8 +419,9 @@ function cargarSolicitudesGuardadas(){
 
             if(botonCotizar){
                 botonCotizar.addEventListener("click", () => {
-                    document.getElementById("modalCotizar").classList.add("active");
-                });
+    localStorage.setItem("obra360_solicitud_cotizando", solicitud.codigo);
+    document.getElementById("modalCotizar").classList.add("active");
+});
             }
         }
     });
@@ -450,14 +459,18 @@ if(enviarCotizacion){
 
         if(solicitudesGuardadas.length > 0){
 
-            solicitudesGuardadas[0].estado = "Cotizada";
-            solicitudesGuardadas[0].monto = monto;
-            solicitudesGuardadas[0].plazo = plazo;
-            solicitudesGuardadas[0].comentarioCotizacion = comentario;
+            const codigoCotizando = localStorage.getItem("obra360_solicitud_cotizando");
 
+const solicitudCotizada = solicitudesGuardadas.find(solicitud => solicitud.codigo === codigoCotizando);
+
+if(solicitudCotizada){
+    solicitudCotizada.estado = "Cotizada";
+    solicitudCotizada.monto = monto;
+    solicitudCotizada.plazo = plazo;
+    solicitudCotizada.comentarioCotizacion = comentario;
             localStorage.setItem("obra360_solicitudes", JSON.stringify(solicitudesGuardadas));
         }
-
+}
         modalCotizar.classList.remove("active");
 
         location.reload();
