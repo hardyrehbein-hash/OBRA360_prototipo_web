@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OBRA360 | Prototipo</title>
   <link rel="stylesheet" href="styles.css"/>
+  <!-- Librerías para PDF y visualización 3D (BIM) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
   <section id="loginScreen" class="login-screen">
@@ -38,10 +42,12 @@
   <h3 id="loginTitle">Acceso OBRA360</h3>
 
   <label>Usuario</label>
-  <input type="text" placeholder="usuario@obra360.cl">
+  <input type="text" id="loginUser" placeholder="usuario@obra360.cl">
 
   <label>Contraseña</label>
-  <input type="password" placeholder="••••••••">
+  <input type="password" id="loginPassword" placeholder="••••••••">
+
+  <div id="loginError" class="login-error-message"></div>
 
   <button id="loginAccess" class="primary">
     Entrar al sistema
@@ -87,8 +93,12 @@
 <button id="menuDocs" class="nav" data-view="documentos">Documentos</button>
 
 <button id="menuPagos" class="nav" data-view="pagos">Estados de pago</button>
+<button id="menuProveedores" class="nav" data-view="proveedores">Licitaciones y Proveedores</button>
 <button id="btnAdminSolicitudes" class="nav" data-view="adminSolicitudes">
     Gestión solicitudes
+</button>
+<button id="btnLogout" class="nav" style="color: #ff6b6b; border-top: 1px solid rgba(255,255,255,0.15); border-radius: 0; margin-top: 15px; padding-top: 15px;">
+    🚪 Cerrar Sesión
 </button>
       </nav>
 
@@ -119,7 +129,7 @@
             <h2>Control digital de obras en tiempo real.</h2>
             <p>Resumen ejecutivo actualizado con avance físico, planificación, pagos, documentos y decisiones pendientes.</p>
           </div>
-          <button class="primary">Descargar reporte semanal</button>
+          <button id="btnDownloadWeeklyReportPdf" class="primary">Descargar reporte semanal</button>
         </div>
 
         <div class="kpis">
@@ -198,23 +208,29 @@ riesgos y próximos hitos de obra.
 
 </div>
 
-<div class="photo-gallery">
-
-  <div class="photo-item">
-    📸 Vista avance fachada norte
+<div id="photoUploadSection" class="panel" style="margin-bottom: 24px; display: none;">
+  <h3>Registrar Avance Fotográfico (Solo Administrador)</h3>
+  <p class="section-subtitle">Suba una foto real de terreno para documentar el avance del proyecto.</p>
+  <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+    <input type="file" id="uploadPhotoInput" accept="image/*" style="display: none;">
+    <button class="primary" onclick="document.getElementById('uploadPhotoInput').click()">
+      📷 Seleccionar Imagen
+    </button>
+    <input type="text" id="photoTitleInput" placeholder="Ej: Hormigonado de losa Nivel 3" style="padding: 12px; border-radius: 12px; border: 1px solid var(--gray); flex: 1; min-width: 200px; font-family: inherit;">
+    <button id="submitPhotoBtn" class="secondary" style="margin-bottom: 0;">
+      ✓ Guardar en Proyecto
+    </button>
   </div>
-
-  <div class="photo-item">
-    📸 Instalaciones interiores nivel 2
+  <div id="uploadPhotoPreview" style="margin-top: 15px; display: none;">
+    <img id="previewImg" src="" style="max-height: 200px; border-radius: 12px; border: 1px solid var(--gray);">
   </div>
-
-  <div class="photo-item">
-    📸 Avance terminaciones acceso principal
-  </div>
-
 </div>
 
-<button class="primary">
+<div class="photo-gallery" id="projectPhotoGallery">
+  <!-- Se llena dinámicamente -->
+</div>
+
+<button id="btnDownloadReportPdf" class="primary">
   Descargar reporte PDF
 </button>
         <div class="timeline">
@@ -250,26 +266,118 @@ riesgos y próximos hitos de obra.
 
       <section id="bim" class="view">
         <h2>Modelo BIM 3D</h2>
-        <div class="bim-box">
-          <div class="cube">BIM</div>
-          <div>
-            <h3>Visualizador 3D conceptual</h3>
-            <p>En la versión real se integrará IFC.js, Speckle o Autodesk Viewer para navegar el modelo por capas.</p>
-            <ul>
-              <li>Arquitectura</li>
-              <li>Estructura</li>
-              <li>Sanitario</li>
-              <li>Eléctrico</li>
-              <li>Climatización</li>
-            </ul>
+        <p class="section-subtitle">Navegue por el modelo 3D de forma interactiva. Use Orbit Controls (clic izquierdo para rotar, derecho para desplazar, rueda para zoom) y filtre las capas del edificio.</p>
+        
+        <div class="bim-dashboard">
+          <div class="bim-viewer-panel">
+            <div id="bimCanvasContainer" class="bim-canvas-container">
+              <div id="bimLoaderOverlay" class="bim-loader-overlay">
+                <div class="spinner"></div>
+                <p>Inicializando motor 3D...</p>
+              </div>
+            </div>
+          </div>
+          <div class="bim-controls-panel">
+            <div class="panel">
+              <h3>Filtros de Capas BIM</h3>
+              <div class="layer-toggles">
+                <label class="layer-checkbox"><input type="checkbox" id="layerArq" checked> <span class="layer-indicator arq"></span> Arquitectura</label>
+                <label class="layer-checkbox"><input type="checkbox" id="layerEst" checked> <span class="layer-indicator est"></span> Estructura</label>
+                <label class="layer-checkbox"><input type="checkbox" id="layerSan" checked> <span class="layer-indicator san"></span> Sanitarias (Plomería)</label>
+                <label class="layer-checkbox"><input type="checkbox" id="layerEle" checked> <span class="layer-indicator ele"></span> Eléctricas (Canalización)</label>
+                <label class="layer-checkbox"><input type="checkbox" id="layerHvac" checked> <span class="layer-indicator hvac"></span> Climatización (HVAC)</label>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Cargar Modelo IFC Propio</h3>
+              <div class="ifc-upload-zone" id="ifcUploadZone">
+                <div class="ifc-upload-icon">📂</div>
+                <p>Arrastre un archivo <strong>.ifc</strong> aquí o haga clic para subir.</p>
+                <input type="file" id="ifcFileInput" accept=".ifc" style="display: none;">
+                <button class="secondary" onclick="document.getElementById('ifcFileInput').click()" style="margin-bottom:0;">Seleccionar IFC</button>
+              </div>
+            </div>
+
+            <div class="panel" id="bimPropertiesPanel">
+              <h3>Propiedades del Elemento</h3>
+              <div id="bimPropertiesContent">
+                <p style="color:var(--muted); font-style:italic;">Haga clic en cualquier objeto en el visor 3D para inspeccionar sus especificaciones técnicas de obra.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <section id="camaras" class="view">
-        <h2>Cámaras en vivo</h2>
-        <div class="camera-grid">
-          <div><span>EN VIVO</span></div><div><span>EN VIVO</span></div><div><span>TIMELAPSE</span></div><div><span>ACCESO</span></div>
+        <h2>Cámaras en vivo CCTV</h2>
+        <p class="section-subtitle">Visualice las transmisiones en vivo de las cámaras de seguridad del proyecto. Puede interactuar con las cámaras, capturar fotos de terreno e integrarlas al reporte semanal.</p>
+        
+        <div class="camera-grid-custom">
+          <!-- Canal 1: Webcam o Fallback -->
+          <div class="camera-card" id="camCard1">
+            <span class="camera-badge live">CANAL 1 · ACCESO PRINCIPAL (LIVE)</span>
+            <div class="camera-stream-wrapper">
+              <video id="cctvWebcam" autoplay playsinline muted class="camera-video"></video>
+              <div id="webcamFallback" class="camera-video-fallback">
+                <div class="fallback-pulsing-icon">📷</div>
+                <p>Acceso a la cámara web en vivo</p>
+                <button class="primary" id="btnStartWebcam" style="padding: 8px 14px; font-size:12px; font-family: inherit;">Activar Webcam</button>
+              </div>
+            </div>
+            <div class="camera-controls">
+              <button class="cam-btn" id="btnSnapCam1">📸 Capturar</button>
+              <button class="cam-btn" id="btnToggleCam1">⏸ Pausar</button>
+              <button class="cam-btn" id="btnFullscreenCam1">Ampliar</button>
+            </div>
+          </div>
+
+          <!-- Canal 2: Grúa Torre 1 -->
+          <div class="camera-card" id="camCard2">
+            <span class="camera-badge live">CANAL 2 · GRÚA TORRE 1 (LIVE)</span>
+            <div class="camera-stream-wrapper">
+              <video id="cctvVideoCrane" loop autoplay playsinline muted class="camera-video" src="https://assets.mixkit.co/videos/preview/mixkit-construction-site-with-crane-41655-large.mp4" crossorigin="anonymous"></video>
+            </div>
+            <div class="camera-controls">
+              <button class="cam-btn" id="btnSnapCam2">📸 Capturar</button>
+              <button class="cam-btn" id="btnToggleCam2">⏸ Pausar</button>
+              <button class="cam-btn" id="btnFullscreenCam2">Ampliar</button>
+            </div>
+          </div>
+
+          <!-- Canal 3: Timelapse Semanal -->
+          <div class="camera-card" id="camCard3">
+            <span class="camera-badge timelapse">CANAL 3 · TIMELAPSE ESTRUCTURA</span>
+            <div class="camera-stream-wrapper">
+              <video id="cctvVideoTimelapse" loop autoplay playsinline muted class="camera-video" src="https://assets.mixkit.co/videos/preview/mixkit-timelapse-of-a-street-in-a-modern-city-41712-large.mp4" crossorigin="anonymous"></video>
+            </div>
+            <div class="camera-controls">
+              <button class="cam-btn" id="btnSnapCam3">📸 Capturar</button>
+              <button class="cam-btn" id="btnToggleCam3">⏸ Pausar</button>
+              <button class="cam-btn" id="btnFullscreenCam3">Ampliar</button>
+            </div>
+          </div>
+
+          <!-- Canal 4: Control Bodega -->
+          <div class="camera-card" id="camCard4">
+            <span class="camera-badge live">CANAL 4 · ACCESO BODEGAS (LIVE)</span>
+            <div class="camera-stream-wrapper">
+              <video id="cctvVideoWarehouse" loop autoplay playsinline muted class="camera-video" src="https://assets.mixkit.co/videos/preview/mixkit-worker-on-a-construction-site-41657-large.mp4" crossorigin="anonymous"></video>
+            </div>
+            <div class="camera-controls">
+              <button class="cam-btn" id="btnSnapCam4">📸 Capturar</button>
+              <button class="cam-btn" id="btnToggleCam4">⏸ Pausar</button>
+              <button class="cam-btn" id="btnFullscreenCam4">Ampliar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas oculto para capturar frames de videos -->
+        <canvas id="cctvCaptureCanvas" style="display:none;"></canvas>
+
+        <!-- Notificación de captura exitosa -->
+        <div id="cctvToast" class="cctv-toast">
+          ✓ Captura de CCTV añadida correctamente a la galería de fotos del proyecto.
         </div>
       </section>
 
@@ -579,6 +687,373 @@ Solicitud aprobada correctamente. La constructora será notificada.
 
 </div>
 </section>
+
+      <section id="proveedores" class="view">
+        <header class="section-header">
+          <h2>Licitaciones y Contratistas (HRH Consulting)</h2>
+          <p class="section-subtitle">Gestión de proveedores, comparativa de ofertas, recomendaciones de contratación y evaluación de desempeño.</p>
+        </header>
+
+        <!-- Sub-pestañas -->
+        <div class="tabs-container">
+          <div class="tabs-menu">
+            <button class="tab-btn active" data-tab="registro-fichas">Registro y Fichas</button>
+            <button class="tab-btn" data-tab="comparativa-ofertas">Comparativa y Recomendación</button>
+            <button class="tab-btn" data-tab="formatos-minutas">Formatos y Minutas</button>
+            <button class="tab-btn" data-tab="evaluacion-desempeno">Evaluación de Desempeño</button>
+          </div>
+        </div>
+
+        <!-- Contenido Sub-pestañas -->
+        <div class="tab-content active" id="tab-registro-fichas">
+          <div class="tab-actions">
+            <div class="search-box">
+              <input type="text" id="searchProveedor" placeholder="Buscar proveedor por nombre o RUT...">
+            </div>
+            <div class="filter-box">
+              <select id="filterEspecialidad">
+                <option value="">Todas las especialidades</option>
+                <option value="Estructuras">Obra Gruesa y Estructuras</option>
+                <option value="Electricidad">Instalaciones Eléctricas</option>
+                <option value="Climatización">Instalaciones de Climatización</option>
+                <option value="Sanitarias">Instalaciones Sanitarias</option>
+                <option value="Terminaciones">Terminaciones y Pinturas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="proveedores-layout">
+            <!-- Tabla de Proveedores (Registro Inicial) -->
+            <div class="proveedores-list-panel">
+              <div class="table-card">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Proveedor</th>
+                      <th>Especialidad</th>
+                      <th>Puntaje Preadj.</th>
+                      <th>Desempeño Prom.</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="proveedoresTableBody">
+                    <!-- Se llena con JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Ficha de Evaluación y Registro Histórico de Cumplimiento (Detalle) -->
+            <div class="proveedor-detail-panel" id="proveedorDetailPanel">
+              <div class="detail-placeholder" id="detailPlaceholder">
+                <div class="placeholder-icon">🏢</div>
+                <p>Seleccione un proveedor de la lista para ver su Ficha de Evaluación y Registro Histórico de Cumplimiento.</p>
+              </div>
+              <div class="detail-card-content" id="detailCardContent" style="display:none;">
+                <!-- Se llena dinámicamente con JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-comparativa-ofertas" style="display:none;">
+          <div class="comparativa-header">
+            <label for="comparativaLicitacion">Seleccionar Proceso de Licitación:</label>
+            <select id="comparativaLicitacion">
+              <option value="climatizacion">Instalaciones de Climatización - Las Palmas</option>
+              <option value="estructura">Obra Gruesa y Estructuras - Las Palmas</option>
+            </select>
+          </div>
+
+          <div class="comparativa-grid-layout">
+            <!-- Matriz Comparativa de Ofertas -->
+            <div class="panel wide-panel">
+              <h3>Matriz Comparativa de Ofertas</h3>
+              <p class="panel-desc">Análisis económico y técnico de las ofertas recibidas. Ponderación: 50% Económico, 30% Técnico, 20% Cumplimiento Histórico.</p>
+              <div class="table-card">
+                <table class="comparativa-table">
+                  <thead>
+                    <tr>
+                      <th>Criterio</th>
+                      <th id="bidder-1-name">Oferente A</th>
+                      <th id="bidder-2-name">Oferente B</th>
+                      <th id="bidder-3-name">Oferente C</th>
+                    </tr>
+                  </thead>
+                  <tbody id="comparativaTableBody">
+                    <!-- Se llena con JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Recomendación de Contratación -->
+            <div class="panel card-panel">
+              <h3>Recomendación de Contratación</h3>
+              <div class="report-paper" id="recomendacionLetter">
+                <!-- Se llena dinámicamente con JS -->
+              </div>
+            </div>
+            
+            <!-- Minuta de Adjudicación -->
+            <div class="panel wide-panel adjudication-panel">
+              <h3>Modelo de Minuta de Adjudicación</h3>
+              <p class="panel-desc">Documento oficial para formalizar la adjudicación de la obra basada en las recomendaciones de HRH Consulting.</p>
+              
+              <div class="adjudication-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Encargado de Obra / Administrador</label>
+                    <input type="text" id="adjAdminName" value="Ing. Hardy Rehbein">
+                  </div>
+                  <div class="form-group">
+                    <label>Fecha de Adjudicación</label>
+                    <input type="date" id="adjDate" value="2026-06-14">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Boleta de Garantía Requerida</label>
+                    <select id="adjWarranty">
+                      <option value="10% de fiel cumplimiento del contrato">10% de fiel cumplimiento del contrato</option>
+                      <option value="5% de fiel cumplimiento del contrato">5% de fiel cumplimiento del contrato</option>
+                      <option value="Sin boleta de garantía (aprobación especial)">Sin boleta de garantía (aprobación especial)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Observaciones de Adjudicación</label>
+                    <textarea id="adjNotes" rows="2" placeholder="Notas adicionales sobre el contrato..."></textarea>
+                  </div>
+                </div>
+
+                <div class="minuta-signature-area" id="minutaSignatureArea">
+                  <div class="minuta-document-preview" id="minutaDocumentPreview">
+                    <!-- Vista previa de la minuta de adjudicación -->
+                  </div>
+                  <div class="signature-actions">
+                    <button id="btnFirmarMinuta" class="primary">Firmar y Adjudicar Contrato</button>
+                    <button id="btnDescargarMinuta" class="secondary">Descargar Minuta (PDF)</button>
+                  </div>
+                  <div id="minutaAdjudicadaMessage" class="success-message">
+                    ✓ Minuta firmada y registrada en el sistema. Licitación cerrada y enviada a Contratos.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-formatos-minutas" style="display:none;">
+          <div class="grid-two-columns">
+            <!-- Descargas de Formatos -->
+            <div class="panel">
+              <h3>Formatos de Solicitud de Cotización (RFQ) y Modelos</h3>
+              <p class="panel-desc">Formatos estándar estructurados por HRH Consulting para contrataciones en obra.</p>
+              
+              <div class="document-download-list">
+                <div class="doc-download-item">
+                  <div class="doc-icon">📊</div>
+                  <div class="doc-info">
+                    <h4>Formato RFQ Estándar (Excel)</h4>
+                    <small>F-HRH-RFQ-01 · Estructura de costos unitarios e información general.</small>
+                  </div>
+                  <button class="secondary btn-download-mock" data-file="F-HRH-RFQ-01.xlsx">Descargar</button>
+                </div>
+                <div class="doc-download-item">
+                  <div class="doc-icon">📝</div>
+                  <div class="doc-info">
+                    <h4>Formato RFQ Técnico (Word)</h4>
+                    <small>F-HRH-RFQ-02 · Requerimientos de equipo, cuadrilla y certificaciones.</small>
+                  </div>
+                  <button class="secondary btn-download-mock" data-file="F-HRH-RFQ-02.docx">Descargar</button>
+                </div>
+                <div class="doc-download-item">
+                  <div class="doc-icon">⚖️</div>
+                  <div class="doc-info">
+                    <h4>Modelo Minuta de Adjudicación Base</h4>
+                    <small>M-HRH-ADJ-01 · Formato legal de acuerdo preliminar y condiciones de garantía.</small>
+                  </div>
+                  <button class="secondary btn-download-mock" data-file="M-HRH-ADJ-01.docx">Descargar</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Generador de Solicitud de Cotización -->
+            <div class="panel">
+              <h3>Generador Interactivo de Solicitud de Cotización (RFQ)</h3>
+              <p class="panel-desc">Rellene los campos para confeccionar y previsualizar una Solicitud de Cotización formal.</p>
+              
+              <div class="rfq-generator-form">
+                <div class="form-group">
+                  <label>Especialidad / Partida</label>
+                  <input type="text" id="rfqPartida" placeholder="Ej: Pinturas Interiores Nivel 3 y 4" value="Instalación Eléctrica y Climatización">
+                </div>
+                <div class="form-group">
+                  <label>Descripción detallada del requerimiento</label>
+                  <textarea id="rfqDesc" rows="3" placeholder="Detalle el alcance de los trabajos, materiales incluidos y plazos requeridos...">Canalizado, cableado e instalación de artefactos de iluminación según plano eléctrico aprobado. Incluye tableros generales y protecciones.</textarea>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Fecha Límite Recepción</label>
+                    <input type="date" id="rfqDeadline" value="2026-06-30">
+                  </div>
+                  <div class="form-group">
+                    <label>Planos de Referencia</label>
+                    <input type="text" id="rfqPlanos" placeholder="Ej: PL-ARQ-05, PL-ARQ-06" value="PL-ELEC-01, PL-ELEC-02">
+                  </div>
+                </div>
+                <button id="btnGenerarRFQ" class="primary">Generar y Previsualizar RFQ</button>
+              </div>
+
+              <!-- Vista Previa de RFQ Generado -->
+              <div class="rfq-preview-container" id="rfqPreviewContainer" style="display:none;">
+                <div class="report-paper rfq-paper">
+                  <div class="rfq-paper-header">
+                    <div class="rfq-logo">OBRA<span>360</span></div>
+                    <div class="rfq-doc-code">CÓDIGO: F-HRH-RFQ-01_GEN</div>
+                  </div>
+                  <hr>
+                  <div class="rfq-paper-title">SOLICITUD DE COTIZACIÓN DE OBRAS / SERVICIOS</div>
+                  <table class="rfq-paper-meta-table">
+                    <tr><td><strong>Proyecto:</strong> Edificio Las Palmas</td><td><strong>Fecha Emisión:</strong> 14/06/2026</td></tr>
+                    <tr><td><strong>Partida/Item:</strong> <span id="prevRfqPartida">-</span></td><td><strong>Límite Ofertas:</strong> <span id="prevRfqDeadline">-</span></td></tr>
+                    <tr><td><strong>Planos Ref:</strong> <span id="prevRfqPlanos">-</span></td><td><strong>Consultora Mandante:</strong> HRH Consulting</td></tr>
+                  </table>
+                  <div class="rfq-paper-body">
+                    <h5>1. ALCANCE Y DESCRIPCIÓN</h5>
+                    <p id="prevRfqDesc">-</p>
+                    <h5>2. CONDICIONES GENERALES</h5>
+                    <ul>
+                      <li>Las cotizaciones deben presentarse detallando Análisis de Precios Unitarios (APU).</li>
+                      <li>Indicar plazo de entrega en días corridos y disponibilidad de inicio.</li>
+                      <li>Se exige boleta de garantía de fiel cumplimiento conforme al monto final ofertado.</li>
+                    </ul>
+                  </div>
+                  <hr>
+                  <div class="rfq-paper-footer">
+                    Generado digitalmente por el Administrador de OBRA360.
+                  </div>
+                </div>
+                <div class="rfq-preview-actions">
+                  <button id="btnPrintRFQ" class="secondary">Imprimir / Guardar PDF</button>
+                  <button id="btnSendRFQ" class="primary">Enviar a Proveedores Registrados</button>
+                </div>
+                <div id="rfqEnviadoMessage" class="success-message">
+                  ✓ Solicitud de Cotización enviada exitosamente a los contratistas de la especialidad seleccionada.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-evaluacion-desempeno" style="display:none;">
+          <div class="grid-two-columns">
+            <!-- Formulario de Evaluación -->
+            <div class="panel">
+              <h3>Sistema de Evaluación de Desempeño (Subcontratistas)</h3>
+              <p class="panel-desc">Evalúe el cumplimiento técnico, operativo y de seguridad de los subcontratistas activos en obra.</p>
+              
+              <div class="eval-form">
+                <div class="form-group">
+                  <label>Seleccionar Contratista / Proveedor</label>
+                  <select id="evalProveedor">
+                    <!-- Se llena con JS -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Contrato / Proyecto Evaluado</label>
+                  <input type="text" id="evalProject" value="Edificio Las Palmas (Fase Activa)">
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-label">
+                    <span>Calidad de los Trabajos (30%):</span>
+                    <strong id="valCalidad">85 pts</strong>
+                  </div>
+                  <input type="range" id="slideCalidad" min="10" max="100" value="85" step="5">
+                  <small class="slider-hint">Evaluación de acabados, tolerancias y cumplimiento de especificaciones técnicas.</small>
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-label">
+                    <span>Cumplimiento de Plazos (30%):</span>
+                    <strong id="valPlazo">80 pts</strong>
+                  </div>
+                  <input type="range" id="slidePlazo" min="10" max="100" value="80" step="5">
+                  <small class="slider-hint">Cumplimiento de hitos parciales y programa de la Carta Gantt.</small>
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-label">
+                    <span>Prevención de Riesgos y Seguridad (20%):</span>
+                    <strong id="valSeguridad">90 pts</strong>
+                  </div>
+                  <input type="range" id="slideSeguridad" min="10" max="100" value="90" step="5">
+                  <small class="slider-hint">Uso de EPP, orden y aseo en talleres, y asistencia a charlas diarias.</small>
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-label">
+                    <span>Gestión Administrativa y Laboral (20%):</span>
+                    <strong id="valGestion">75 pts</strong>
+                  </div>
+                  <input type="range" id="slideGestion" min="10" max="100" value="75" step="5">
+                  <small class="slider-hint">Entrega a tiempo de libro de asistencia, cotizaciones previsionales e informes técnicos.</small>
+                </div>
+
+                <div class="form-group">
+                  <label>Comentarios y Observaciones</label>
+                  <textarea id="evalComments" rows="3" placeholder="Comentarios justificativos de las calificaciones asignadas...">Muy buen desempeño técnico general en terreno, cumpliendo la normativa de la constructora.</textarea>
+                </div>
+
+                <button id="btnRegistrarEval" class="primary">Registrar y Actualizar Desempeño</button>
+                <div id="evalRegistradaMessage" class="success-message">
+                  ✓ Evaluación registrada. El puntaje promedio del contratista ha sido actualizado en el registro.
+                </div>
+              </div>
+            </div>
+
+            <!-- Previsualización del Desempeño Actual del Contratista Seleccionado -->
+            <div class="panel">
+              <h3>Scorecard de Desempeño en Tiempo Real</h3>
+              <p class="panel-desc">Indicadores calculados dinámicamente según la puntuación asignada arriba.</p>
+              
+              <div class="scorecard-preview">
+                <div class="scorecard-header">
+                  <div class="scorecard-company" id="scorecardCompany">Nombre del Contratista</div>
+                  <div class="scorecard-overall" id="scorecardOverall">83.0</div>
+                  <div class="scorecard-overall-label">Puntaje Ponderado</div>
+                </div>
+
+                <div class="scorecard-bars">
+                  <div class="scorecard-bar-item">
+                    <div class="bar-label">Calidad (30%) <span id="labelValCalidad">85%</span></div>
+                    <div class="bar-outer"><div class="bar-inner" id="barCalidad" style="width: 85%;"></div></div>
+                  </div>
+                  <div class="scorecard-bar-item">
+                    <div class="bar-label">Plazo (30%) <span id="labelValPlazo">80%</span></div>
+                    <div class="bar-outer"><div class="bar-inner orange" id="barPlazo" style="width: 80%;"></div></div>
+                  </div>
+                  <div class="scorecard-bar-item">
+                    <div class="bar-label">Seguridad (20%) <span id="labelValSeguridad">90%</span></div>
+                    <div class="bar-outer"><div class="bar-inner green" id="barSeguridad" style="width: 90%;"></div></div>
+                  </div>
+                  <div class="scorecard-bar-item">
+                    <div class="bar-label">Gestión (20%) <span id="labelValGestion">75%</span></div>
+                    <div class="bar-outer"><div class="bar-inner gray" id="barGestion" style="width: 75%;"></div></div>
+                  </div>
+                </div>
+
+                <div class="scorecard-gauge-summary" id="scorecardGrade">
+                  <strong>Estado: Desempeño Bueno</strong>
+                  <p>El contratista cumple satisfactoriamente los estándares contractuales de obra y seguridad.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="documentos" class="view">
         <h2>Documentos</h2>
         <div class="docs">
